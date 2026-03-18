@@ -23,6 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool TriggerEvent_Actor();
 	void Actor_Move(const FVector& arrive);
+	void Actor_Turn(const FRotator& turn);
 
 };
