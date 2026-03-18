@@ -19,20 +19,29 @@ void AAssignment_Actor::BeginPlay()
 
 	FVector ActorLocation = GetActorLocation(); //Saved This Actor Location
 
-	if (GEngine) 
+	for (int i = 0; i < 10; i++) 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("Text"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Actor : %s"), *GetName()));
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Actor : %s"), *ActorLocation.ToString()));
+		float RandomX = FMath::RandRange(1, 100);
+		float RandomY = FMath::RandRange(1, 100);
+
+		Actor_Move(FVector(RandomX, RandomY, 0.f));
 	}
-	
 }
 
 // Called every frame
 void AAssignment_Actor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 
 }
 
+void AAssignment_Actor::Actor_Move(const FVector& arrive)
+{
+	SetActorLocation(GetActorLocation() += arrive);
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Actor Move : %s"), *GetActorLocation().ToString()));
+	}
+}
 
