@@ -16,12 +16,13 @@ AAssignment_Actor::AAssignment_Actor()
 void AAssignment_Actor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	float TotalDistance = 0.0f;
+	int success_move = 0;
 	SetActorLocation(FVector(0, 50, 0));
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("[Start Location] : %s"), *GetActorLocation().ToString()));
 	UE_LOG(LogTemp, Warning, TEXT("[Start Location] : %s"), *GetActorLocation().ToString());
-	int count = 0;
-	for (; count < 10; count++) 
+	int Totalcount = 0;
+	for (; Totalcount < 10; Totalcount++)
 	{
 		float RandomX = FMath::RandRange(1, 100);
 		float RandomY = FMath::RandRange(1, 100);
@@ -31,14 +32,20 @@ void AAssignment_Actor::BeginPlay()
 		{
 			if (TriggerEvent_Actor())
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
-				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				success_move++;
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), Totalcount));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), Totalcount);
+
+				FVector Temp_ActorLocation = GetActorLocation();
+				FVector Move_Location = GetActorLocation() + FVector(RandomX, RandomY, 0.f);
+				TotalDistance += FVector::Dist(Temp_ActorLocation, Move_Location);
+
 				Actor_Move(FVector(RandomX, RandomY, 0.f));//move
 			}
 			else 
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
-				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), Totalcount));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), Totalcount);
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Move Fail")));
 				UE_LOG(LogTemp, Warning, TEXT("Move Fail"));
 			}
@@ -47,20 +54,25 @@ void AAssignment_Actor::BeginPlay()
 		{
 			if (TriggerEvent_Actor()) 
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
-				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), Totalcount));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), Totalcount);
 				Actor_Turn(FRotator(0.f, RandomZ, 0.f));
 			}
 			else 
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
-				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), Totalcount));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), Totalcount);
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Turn Fail")));
 				UE_LOG(LogTemp, Warning, TEXT("Turn Fail"));
 			}
 		}
 
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("[Total Distance: %.2f]"), TotalDistance));
+	UE_LOG(LogTemp, Warning, TEXT("[Total Distance: %.2f]"), TotalDistance);
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Purple, FString::Printf(TEXT("[Success move count: %d]"), success_move));
+	UE_LOG(LogTemp, Warning, TEXT("[Success move count %d]"), success_move);
 }
 
 // Called every frame
