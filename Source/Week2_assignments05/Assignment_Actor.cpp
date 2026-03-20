@@ -16,12 +16,12 @@ AAssignment_Actor::AAssignment_Actor()
 void AAssignment_Actor::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	SetActorLocation(FVector(0, 50, 0));
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Start Location] : %s"), *GetActorLocation().ToString()));
-	UE_LOG(LogTemp, Warning, TEXT("[Start Location] : %s"), *GetActorLocation().ToString());
 
-	for (int i = 0; i < 10; i++) 
+	SetActorLocation(FVector(0, 50, 0));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("[Start Location] : %s"), *GetActorLocation().ToString()));
+	UE_LOG(LogTemp, Warning, TEXT("[Start Location] : %s"), *GetActorLocation().ToString());
+	int count = 0;
+	for (; count < 10; count++) 
 	{
 		float RandomX = FMath::RandRange(1, 100);
 		float RandomY = FMath::RandRange(1, 100);
@@ -29,11 +29,35 @@ void AAssignment_Actor::BeginPlay()
 
 		if (TriggerEvent_Actor()) 
 		{
-			Actor_Move(FVector(RandomX, RandomY, 0.f));//move
+			if (TriggerEvent_Actor())
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				Actor_Move(FVector(RandomX, RandomY, 0.f));//move
+			}
+			else 
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Move Fail")));
+				UE_LOG(LogTemp, Warning, TEXT("Move Fail"));
+			}
 		}
 		else 
 		{
-			Actor_Turn(FRotator(0.f, RandomZ, 0.f));
+			if (TriggerEvent_Actor()) 
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				Actor_Turn(FRotator(0.f, RandomZ, 0.f));
+			}
+			else 
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("[Step %d]"), count));
+				UE_LOG(LogTemp, Warning, TEXT("[Step %d]"), count);
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Turn Fail")));
+				UE_LOG(LogTemp, Warning, TEXT("Turn Fail"));
+			}
 		}
 
 	}
@@ -66,7 +90,7 @@ void AAssignment_Actor::Actor_Move(const FVector& arrive)
 	SetActorLocation(GetActorLocation() + arrive);
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Actor Move! : %s"), *GetActorLocation().ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, FString::Printf(TEXT("Actor Move! : %s"), *GetActorLocation().ToString()));
 		UE_LOG(LogTemp, Warning, TEXT("Actor Move! : %s"), *GetActorLocation().ToString());
 	}
 }
@@ -76,7 +100,7 @@ void AAssignment_Actor::Actor_Turn(const FRotator& turn)
 	SetActorRotation(GetActorRotation() + turn);
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Actor Turn! : %s"), *GetActorRotation().ToString()));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, FString::Printf(TEXT("Actor Turn! : %s"), *GetActorRotation().ToString()));
 		UE_LOG(LogTemp, Warning, TEXT("Actor Turn! : %s"), *GetActorRotation().ToString());
 	}
 }
